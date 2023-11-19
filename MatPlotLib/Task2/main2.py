@@ -2,7 +2,7 @@ import matplotlib.pyplot as pyplot
 import matplotlib.ticker as ticker
 
 with open("1.txt") as file:
-    data = [string for string in file.read().split('\n')]
+    data = [string.rstrip() for string in file.readlines()]
     xs = []
     ys = []
     abs_max_x = 0

@@ -1,7 +1,7 @@
 import matplotlib.pyplot as pyplot
 
 with open("students.csv") as file:
-    data = [string for string in file.read().split('\n')]
+    data = [string.rstrip() for string in file.readlines()]
     preps = {}
     groups = {}
     name_last = 0
