@@ -1,5 +1,5 @@
 import sympy
-from scipy.integrate import odeint
+from scipy.integrate import solve_ivp
 import numpy
 import matplotlib.pyplot as pyplot
 
@@ -17,18 +17,17 @@ rez = solution.rhs.subs(C1, sol_for_const)  # Подставляем в реше
 f = sympy.lambdify(x, rez, 'numpy')  # Превращаем решение в функцию
 
 # SciPy
-def returns_dydx(y, x):
+def returns_dydx(x, y):
     dydx = -2 * y
     return dydx
 
-y0 = numpy.sqrt(2)  # Начальные условия
-xs = numpy.linspace(0, 10, 100)
-ys = odeint(returns_dydx, y0, xs)  # Численно решаем диффур
-ys = numpy.concatenate(ys, axis=0)  # odeint возвращает массив массивов из одного элемента, который мы объединяем в один
+sol = solve_ivp(returns_dydx, [0, 100], [numpy.sqrt(2)])  # Численно решаем диффур
+xs = sol.t
+ys = sol.y[0]
 
 fig, axes = pyplot.subplots(1, 2, figsize=(10, 5), layout='constrained')
-axes[0].plot(xs, f(xs), label='Аналитическое решение SymPy')
-axes[0].plot(xs, ys, label='Численное решение SimPy')
+axes[0].plot(xs, f(xs), zorder=10, label='Аналитическое решение SymPy')
+axes[0].plot(xs, ys, label='Численное решение SciPy')
 axes[1].plot(xs, f(xs) - ys, label='Разность двух решений')
 axes[0].legend()
 axes[1].legend()

@@ -2,13 +2,10 @@ import numpy
 import matplotlib.pyplot as pyplot
 import matplotlib.animation as animation
 
-with open('start.dat') as file:
-    ys = numpy.array([i.rstrip() for i in file.readlines()], numpy.float32)
-    xs = numpy.arange(0, ys.size, 1)
+ys = numpy.loadtxt('start.dat', dtype=numpy.float32)
+xs = numpy.arange(0, ys.size, 1)
 
-A = numpy.eye(ys.size)
-for i in range(ys.size):
-    A[i][-1+i] = -1
+A = numpy.eye(ys.size) - numpy.roll(numpy.eye(ys.size), -1, axis=1)
 
 fig, ax = pyplot.subplots()
 line_plotted = ax.plot(xs, ys)[0]
